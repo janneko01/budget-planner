@@ -1,6 +1,8 @@
 
 from crypt import methods
+from itertools import product
 from pickle import TRUE
+from unicodedata import category
 from unittest import result
 from flask import Flask, redirect, request, session
 from flask import render_template
@@ -18,9 +20,10 @@ app.secret_key = getenv("SECRET_KEY")
 def index():
     if "username" not in session.keys():
         return redirect("/login")
-    sql = "SELECT  id, income, usedIncome FROM budget"
-    #result = db.session.execute(sql)
-    return render_template("index.html", session=session)
+    sql = "SELECT  id, category, product, price FROM costs WHERE userid=:userid"
+    result = db.session.execute(sql, {"userid":session["userid"]})
+    costs = result.fetchall()
+    return render_template("index.html", session=session, costs=costs)
 
 @app.route("/login",methods=["GET", "POST"])
 def login():
@@ -40,6 +43,7 @@ def login():
         hash_value = user.password
         if check_password_hash(hash_value, password):
             session["username"] = username
+            session["userid"] = user.id
             return redirect("/")
         else:
             return render_template("login.html", loginError = True)
@@ -65,7 +69,16 @@ def logout():
         del session["username"]
     return redirect("/login")
 
-@app.route("/new")
+@app.route("/new", methods=["GET", "POST"])
 def new():
-
-    return render_template("add.html")
+    if "username" not in session.keys():
+        return redirect("/login")
+    if request.method == "GET":
+        return render_template("new.html")
+    category = request.form["category"]
+    product = request.form["product"]
+    price = int(request.form["price"])
+    sql = "INSERT INTO costs (category, product, price, userid) VALUES (:category, :product, :price, :userid)"
+    db.session.execute(sql, {"category":category, "product":product, "price":price, "userid":session["userid"]})
+    db.session.commit()
+    return redirect("/")

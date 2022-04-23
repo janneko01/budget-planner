@@ -6,13 +6,15 @@ CREATE TABLE user (
 
 CREATE TABLE monthlyMoney (
     id SERIAL PRIMARY KEY,
-    unused INTEGER
+    unused INTEGER,
+    userid INTEGER
 );
 
 CREATE TABLE costs (
     id SERIAL PRIMARY KEY,
-    eventTime DATETIME,
+    eventTime TIMESTAMP,
     category TEXT,
     product TEXT,
-    price INTEGER
+    price INTEGER,
+    userid INTEGER
 );
