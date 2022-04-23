@@ -1,0 +1,14 @@
+<title>Budget Planner</title>
+<h1>Budget Planner</h1>
+<h2>Tervetuloa! Kirjaudu sisään tai luo tili<h2>
+{% if loginError %}
+<p>Väärä käyttäjätunnus tai salasana</p>
+{% endif %}
+<form action="/login" method="POST">
+<p>Käyttäjätunnus:<br>
+<input type="text" name="username"></p>
+<p>Salasana:<br>
+<input type="password" name="password"></p>
+<input type="submit" value="Kirjaudu">
+</form>
+<a href="/register">Luo tili</a>
