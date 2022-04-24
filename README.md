@@ -9,3 +9,11 @@ Sovelluksen suunniteltuja ominaisuuksia:
 * Käyttäjä voi tarkastella ostohistoriaansa kategorioittain rajattuna.
 * Sovellus esittää graafin kuluvan vuoden ostoksista.
 * Käyttäjä voi tehdä budjettitavoitteita valitsemalleen ajalle.
+
+Sovelluksen nykyinen tilanne:
+* Käyttäjä voi luoda käyttäjätilin ja kirjautua.
+* Käyttäjä voi tallentaa ostoksiensa tietoja palveluun.
+* Käyttäjä näkee näkee tallentamansa ostokset.
+
+
+Sovellus on testattavissa [Herokussa](https://budget-planner-pro.herokuapp.com/).
