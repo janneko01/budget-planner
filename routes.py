@@ -6,6 +6,7 @@ from pickle import TRUE
 from flask import Flask, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
+import users
 
 from db import db
 
@@ -18,49 +19,36 @@ def index():
     costs = result.fetchall()
     return render_template("index.html", session=session, costs=costs)
 
-@app.route("/login",methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if "username" in session.keys():
-        return redirect("/")
     if request.method == "GET":
         return render_template("login.html")
-    username = request.form["username"]
-    password = request.form["password"]
-    
-    sql = "SELECT id, password FROM users WHERE username=:username"
-    result = db.session.execute(sql, {"username":username})
-    user = result.fetchone()
-    if not user:
-        return render_template("login.html", loginError = True)
-    else:
-        hash_value = user.password
-        if check_password_hash(hash_value, password):
-            session["username"] = username
-            session["userid"] = user.id
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if users.login(username, password):
             return redirect("/")
         else:
-            return render_template("login.html", loginError = True)
+            return render_template("error.html", message="Väärä käyttäjätunnus tai salasana")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if "username" in session.keys():
-        return redirect("/")
     if request.method == "GET":
         return render_template("register.html")
-    
-    username = request.form["username"]
-    password = request.form["password"]
-    hash_value = generate_password_hash(password)
-    sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
-    db.session.execute(sql, {"username":username, "password":hash_value})
-    db.session.commit()
-    return redirect("/login")
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if users.register(username, password):
+            return redirect("/")
+        else:
+            return render_template("error.html", message="Rekisteröinti ei onnistunut")
+
 
 @app.route("/logout")
 def logout():
-    if "username" in session.keys():
-        del session["username"]
-    return redirect("/login")
+    users.logout()
+    return redirect("/")
 
 @app.route("/new", methods=["GET", "POST"])
 def new():

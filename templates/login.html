@@ -1,14 +1,40 @@
-<title>Budget Planner</title>
-<h1>Budget Planner</h1>
-<h2>Tervetuloa! Kirjaudu sisään tai luo tili<h2>
-{% if loginError %}
-<p>Väärä käyttäjätunnus tai salasana</p>
-{% endif %}
-<form action="/login" method="POST">
-<p>Käyttäjätunnus:<br>
-<input type="text" name="username"></p>
-<p>Salasana:<br>
-<input type="password" name="password"></p>
-<input type="submit" value="Kirjaudu">
-</form>
-<a href="/register">Luo tili</a>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<head>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<div class="back">
+
+
+    <div class="div-center">
+  
+  
+      <div class="content">
+  
+        <title>Budget Planner</title>
+        <h1>Budget Planner</h1>
+        <h3>Kirjaudu sisään</h3>
+        {% if loginError %}
+        <p>Väärä käyttäjätunnus tai salasana</p>
+        {% endif %}
+        <hr />
+        <form action="/login" method="POST">
+          <div class="form-group">
+            <label for="username">Käyttäjätunnus</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Käyttäjätunnus">
+          </div>
+          <div class="form-group">
+            <label for="password">Salasana</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Salasana">
+          </div>
+          <button type="submit" class="btn btn-primary">Kirjaudu</button>
+          <hr />
+          <a type="button" class="btn btn-link" href="/register">Luo tili</a>
+  
+        </form>
+  
+      </div>
+  
+  
+      </span>
+    </div>
+

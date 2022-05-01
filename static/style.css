@@ -1,0 +1,32 @@
+.back {
+    background: linear-gradient(132deg, #F4D03F 0%, #16A085 100%);
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+  
+  .div-center {
+    width: 400px;
+    height: 400px;
+    background-color: rgb(#ccc);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: auto;
+    padding: 1em 2em;
+    border-bottom: 2px solid rgb(#ccc);
+    display: table;
+  }
+  
+  div.content {
+    display: table-cell;
+    vertical-align: middle;
+    background-color: ghostwhite;
+    padding: 20px;
+  }
