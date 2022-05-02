@@ -1,8 +1,41 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
 <title>Budget Planner</title>
 
 <h1>Budget Planner</h1>
 
-<h2>Tervetuloa {{ session.username }}</h2>
+<h2>Tervetuloa {{ session.username }}!</h2>
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<body>
+<div
+id="myChart" style="width:100%; max-width:600px; height:500px;">
+</div>
+
+<script>
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+var data = google.visualization.arrayToDataTable([
+    ['Category', 'Mhl'],
+    {%- for costByCategory in costsByCategories %}
+        ['{{ costByCategory[0] }}',{{ costByCategory[1] }}],
+    {%- endfor %}
+]);
+
+var options = {
+  title:'Ostokset kategorioittain'
+};
+
+var chart = new google.visualization.PieChart(document.getElementById('myChart'));
+  chart.draw(data, options);
+}
+</script>
+
+
 <table>
     <tbody>
 {% for cost in costs %}
@@ -14,6 +47,10 @@
 {% endfor %}
 </tbody>
 </table>
+
+
+
+</body>
 <a href="/new">Lisää meno</a>
 
 <a href="/logout">Kirjaudu ulos</a>

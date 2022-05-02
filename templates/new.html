@@ -1,8 +1,21 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+
 <Title>Budget Planner</Title>
 <H1>Lisää meno</H1>
 <form action="/new" method="POST">
+
     <p>Ostoksen kategoria:</p>
-    <input type="text" name="category"></p>
+
+
+    <select class="form-select" aria-label="Default select example" name="category">
+        <option selected>Valitse ostoksen kategoria</option>
+        <option value="Alkoholi">Alkoholi</option>
+        <option value="Ruoka">Ruoka</option>
+        <option value="Asuminen">Asuminen</option>
+        <option value="Liikenne">Liikenne</option>
+    </select>
+
     <p>Ostettu tuote</p>
     <input type="text" name="product">
     <p>Ostoksen summa:</p>

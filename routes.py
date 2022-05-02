@@ -17,7 +17,12 @@ def index():
     sql = "SELECT  id, category, product, price FROM costs WHERE userid=:userid"
     result = db.session.execute(sql, {"userid":session["userid"]})
     costs = result.fetchall()
-    return render_template("index.html", session=session, costs=costs)
+
+    sql_categories = "SELECT category, sum(price) FROM costs WHERE userid=:userid GROUP BY category"
+    result_categories = db.session.execute(sql_categories, {"userid":session["userid"]})
+    costsByCategories = result_categories.fetchall()
+    print(costsByCategories)
+    return render_template("index.html", session=session, costs=costs, costsByCategories=costsByCategories)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -62,4 +67,12 @@ def new():
     sql = "INSERT INTO costs (category, product, price, userid) VALUES (:category, :product, :price, :userid)"
     db.session.execute(sql, {"category":category, "product":product, "price":price, "userid":session["userid"]})
     db.session.commit()
+    return redirect("/")
+
+@app.route("/income")
+def income():
+    if "username" not in session.keys():
+        return redirect("/login")
+    if request.method == "GET":
+        return render_template("income.html")
     return redirect("/")
