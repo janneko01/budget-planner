@@ -1,3 +1,4 @@
+from os import abort
 from app import app
 from flask import render_template
 from crypt import methods
@@ -60,7 +61,8 @@ def new():
     if "username" not in session.keys():
         return redirect("/login")
     if request.method == "GET":
-        return render_template("new.html")
+        return render_template("new.html", session=session)
+    users.check_csrf()
     category = request.form["category"]
     product = request.form["product"]
     price = int(request.form["price"])

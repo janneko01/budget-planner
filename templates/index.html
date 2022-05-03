@@ -1,15 +1,14 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+
 
 <title>Budget Planner</title>
-
-<h1>Budget Planner</h1>
-
-<h2>Tervetuloa {{ session.username }}!</h2>
 
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <body>
+  {% include "menu.html" %}
 <div
 id="myChart" style="width:100%; max-width:600px; height:500px;">
 </div>
@@ -51,7 +50,3 @@ var chart = new google.visualization.PieChart(document.getElementById('myChart')
 
 
 </body>
-<a href="/new">Lisää meno</a>
-
-<a href="/logout">Kirjaudu ulos</a>
-

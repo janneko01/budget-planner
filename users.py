@@ -1,5 +1,7 @@
+import os
+import secrets
 from db import db
-from flask import redirect, render_template, request, session
+from flask import abort, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 def login(username, password):
@@ -20,6 +22,8 @@ def login(username, password):
         if check_password_hash(hash_value, password):
             session["username"] = username
             session["userid"] = user.id
+            session["csrf_token"] = secrets.token_hex(16)
+
             return redirect("/")
         else:
             return render_template("login.html", loginError = True)
@@ -45,3 +49,7 @@ def register(username, password):
 
 def user_id():
     return session.get("user_id",0)
+
+def check_csrf():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)

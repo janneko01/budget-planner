@@ -4,9 +4,9 @@ CREATE TABLE user (
     password TEXT
 );
 
-CREATE TABLE monthlyMoney (
+CREATE TABLE income (
     id SERIAL PRIMARY KEY,
-    unused INTEGER,
+    money INTEGER,
     userid INTEGER
 );
 
