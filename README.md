@@ -2,7 +2,7 @@
 
 Sovelluksen avulla voi seurata omaa taloudellista tilannetta ja ostoskäyttäytymistä. Käyttäjä lisää ostoksensa summan ja kategorian sovellukseen ja pystyy tarkastelemaan ostohistoriaansa esimerkiksi kategorioittain.
 
-Sovelluksen suunniteltuja ominaisuuksia:
+Sovellukseen suunniteltuja ominaisuuksia:
 
 * Käyttäjä voi luoda käyttäjätilin, jolle omien ostosten tiedot voi tallentaa.
 * Käyttäjä voi lisätä ostoksensa summan ja kategorian (esim. ruoka tai autoilu) sovellukseen.

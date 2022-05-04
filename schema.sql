@@ -1,4 +1,4 @@
-CREATE TABLE user (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT,
     password TEXT
@@ -6,6 +6,7 @@ CREATE TABLE user (
 
 CREATE TABLE income (
     id SERIAL PRIMARY KEY,
+    eventTime TIMESTAMP,
     money INTEGER,
     userid INTEGER
 );
