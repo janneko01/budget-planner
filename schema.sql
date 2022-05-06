@@ -6,14 +6,15 @@ CREATE TABLE users (
 
 CREATE TABLE income (
     id SERIAL PRIMARY KEY,
-    eventTime TIMESTAMP,
-    money INTEGER,
+    eventDate DATE,
+    source Text,
+    income INTEGER,
     userid INTEGER
 );
 
 CREATE TABLE costs (
     id SERIAL PRIMARY KEY,
-    eventTime TIMESTAMP,
+    eventDate DATE,
     category TEXT,
     product TEXT,
     price INTEGER,

@@ -66,15 +66,23 @@ def new():
     category = request.form["category"]
     product = request.form["product"]
     price = int(request.form["price"])
-    sql = "INSERT INTO costs (category, product, price, userid) VALUES (:category, :product, :price, :userid)"
-    db.session.execute(sql, {"category":category, "product":product, "price":price, "userid":session["userid"]})
+    eventDate = request.form["date"]
+    sql = "INSERT INTO costs (category, product, price, eventDate, userid) VALUES (:category, :product, :price, :eventDate, :userid)"
+    db.session.execute(sql, {"category":category, "product":product, "price":price, "eventDate":eventDate, "userid":session["userid"]})
     db.session.commit()
     return redirect("/")
 
-@app.route("/income")
+@app.route("/income", methods=["GET", "POST"])
 def income():
     if "username" not in session.keys():
         return redirect("/login")
     if request.method == "GET":
-        return render_template("income.html")
+        return render_template("income.html", session=session)
+    users.check_csrf()
+    source = request.form["source"]
+    income = request.form["income"]
+    eventDate = request.form["date"]
+    sql = "INSERT INTO income (source, income, eventDate, userid) VALUES (:source, :income, :eventDate, :userid)"
+    db.session.execute(sql, {"source":source, "income":income, "eventDate":eventDate, "userid":session["userid"]})
+    db.session.commit()
     return redirect("/")

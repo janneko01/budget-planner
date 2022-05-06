@@ -23,6 +23,9 @@
     <input type="text" name="product">
     <p>Ostoksen summa:</p>
     <input type="text" name="price">
+    <p>Ostoksen päivä:</p>
+    <input type="date" id="date" name="date">
+    <p></p>
     <input type="submit" value="Lisää meno">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
 </form>
