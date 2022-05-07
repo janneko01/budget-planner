@@ -8,6 +8,7 @@ from flask import Flask, redirect, request, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 import users
+import costs
 
 from db import db
 
@@ -17,13 +18,18 @@ def index():
         return redirect("/login")
     sql = "SELECT  id, category, product, price FROM costs WHERE userid=:userid"
     result = db.session.execute(sql, {"userid":session["userid"]})
-    costs = result.fetchall()
+    costs1 = result.fetchall()
+
+    costsWithCategories = costs.get_costs_with_categories(session["userid"])
+    allcosts = costs.get_costs(session["userid"])
+    monthlyCosts = costs.get_costs_by_month(session["userid"])
+    costsByMonth = costs.get_costs_by_month(session["userid"])
 
     sql_categories = "SELECT category, sum(price) FROM costs WHERE userid=:userid GROUP BY category"
     result_categories = db.session.execute(sql_categories, {"userid":session["userid"]})
     costsByCategories = result_categories.fetchall()
     print(costsByCategories)
-    return render_template("index.html", session=session, costs=costs, costsByCategories=costsByCategories)
+    return render_template("index.html", session=session, costs=costs1, costsByCategories=costsByCategories, costsByMonth=costsByMonth)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -85,4 +91,12 @@ def income():
     sql = "INSERT INTO income (source, income, eventDate, userid) VALUES (:source, :income, :eventDate, :userid)"
     db.session.execute(sql, {"source":source, "income":income, "eventDate":eventDate, "userid":session["userid"]})
     db.session.commit()
+    return redirect("/")
+
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+    if "username" not in session.keys():
+        return redirect("/login")
+    if request.method == "GET":
+        return render_template("settings.html", session=session)
     return redirect("/")
