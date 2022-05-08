@@ -73,7 +73,9 @@ def new():
     if "username" not in session.keys():
         return redirect("/login")
     if request.method == "GET":
-        return render_template("new.html", session=session)
+        monthlyCosts = costs.get_this_month_costs(session["userid"])
+        print(monthlyCosts)
+        return render_template("new.html", session=session, monthlyCosts=monthlyCosts)
     users.check_csrf()
     category = request.form["category"]
     product = request.form["product"]
@@ -88,7 +90,7 @@ def new():
     sql = "INSERT INTO costs (category, product, price, eventDate, userid) VALUES (:category, :product, :price, :eventDate, :userid)"
     db.session.execute(sql, {"category":category, "product":product, "price":price, "eventDate":eventDate, "userid":session["userid"]})
     db.session.commit()
-    return redirect("/")
+    return redirect("/new")
 
 @app.route("/income", methods=["GET", "POST"])
 def income():

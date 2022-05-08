@@ -3,17 +3,17 @@ from datetime import datetime
 from datetime import timedelta
 import json
 
-def get_costs_with_categories(user_id):
-    sql = """SELECT * FROM costs ORDER BY eventdate"""
-    return db.session.execute(sql, {"user_id":user_id}).fetchone()
+def get_costs_with_categories(userid):
+    sql = """SELECT * FROM costs WHERE userid=:userid ORDER BY eventdate"""
+    return db.session.execute(sql, {"userid":userid}).fetchall()
 
-def get_costs(user_id):
-    sql = """SELECT eventdate, sum(price) FROM costs GROUP BY eventdate"""
-    return db.session.execute(sql, {"user_id":user_id}).fetchone()
+def get_costs(userid):
+    sql = """SELECT eventdate, sum(price) FROM costs WHERE userid=:userid GROUP BY eventdate"""
+    return db.session.execute(sql, {"userid":userid}).fetchall()
 
-def get_costs_by_month(user_id):
-    sql = """SELECT eventdate, sum(price) FROM costs WHERE date_trunc('month', eventdate) = date_trunc('month', CURRENT_DATE) GROUP BY eventdate ORDER BY eventdate"""
-    costs = db.session.execute(sql, {"user_id":user_id}).fetchall()
+def get_costs_by_month(userid):
+    sql = """SELECT eventdate, sum(price) FROM costs WHERE userid=:userid AND date_trunc('month', eventdate) = date_trunc('month', CURRENT_DATE) GROUP BY eventdate ORDER BY eventdate"""
+    costs = db.session.execute(sql, {"userid":userid}).fetchall()
     targetday = datetime.today().date().replace(day = 1)
     nextmonth = (targetday + timedelta(days = 32)).replace(day = 1)
 
@@ -28,3 +28,7 @@ def get_costs_by_month(user_id):
         result.append([targetday.strftime('%d.%m.'), sum])
         targetday += timedelta(days = 1)
     return result
+
+def get_this_month_costs(userid):
+    sql = """SELECT category, product, price, eventdate FROM costs WHERE userid =:userid AND date_trunc('month', eventdate) = date_trunc('month', CURRENT_DATE) ORDER BY eventdate DESC"""
+    return db.session.execute(sql, {"userid":userid}).fetchall()
