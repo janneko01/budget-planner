@@ -1,22 +1,17 @@
 import os
 import secrets
+
+from sqlalchemy import false
 from db import db
 from flask import abort, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 def login(username, password):
-    if "username" in session.keys():
-        return redirect("/")
-    if request.method == "GET":
-        return render_template("login.html")
-    username = request.form["username"]
-    password = request.form["password"]
-    
     sql = "SELECT id, password FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
-        return render_template("login.html", loginError = True)
+        return False
     else:
         hash_value = user.password
         if check_password_hash(hash_value, password):
@@ -24,9 +19,9 @@ def login(username, password):
             session["userid"] = user.id
             session["csrf_token"] = secrets.token_hex(16)
 
-            return redirect("/")
+            return True
         else:
-            return render_template("login.html", loginError = True)
+            return False
 
 def logout():
     if "username" in session.keys():
@@ -41,11 +36,18 @@ def register(username, password):
     
     username = request.form["username"]
     password = request.form["password"]
+    if len(username) < 5 or len (password) < 8:
+        return False
+    sql = "SELECT * FROM users WHERE username = :username"
+    result = db.session.execute(sql, {"username":username})
+    user = result.fetchone()
+    if user:
+        return False
     hash_value = generate_password_hash(password)
     sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
     db.session.execute(sql, {"username":username, "password":hash_value})
     db.session.commit()
-    return redirect("/login")
+    return True
 
 def user_id():
     return session.get("user_id",0)

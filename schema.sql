@@ -20,3 +20,9 @@ CREATE TABLE costs (
     price INTEGER,
     userid INTEGER
 );
+
+CREATE TABLE userSettings (
+    id SERIAL PRIMARY KEY,
+    targetBudget INTEGER,
+    userid INTEGER
+);

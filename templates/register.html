@@ -17,6 +17,9 @@
         <h1>Budget Planner</h1>
         <h3>Luo tili</h3>
         <hr />
+        {% if error %}
+          {{ error }}
+        {% endif %}
         <form action="/register" method="POST">
           <div class="form-group">
             <label for="username">Käyttäjätunnus</label>

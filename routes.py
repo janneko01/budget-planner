@@ -1,6 +1,6 @@
 from os import abort
 from app import app
-from flask import render_template
+from flask import flash, render_template
 from crypt import methods
 from itertools import product
 from pickle import TRUE
@@ -33,28 +33,34 @@ def index():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "GET":
-        return render_template("login.html")
+    if "username" in session.keys():
+        return redirect("/")
+    
+    error = None
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if users.login(username, password):
+        loggedInSuccessfully = users.login(username, password)
+        if loggedInSuccessfully:
             return redirect("/")
-        else:
-            return render_template("error.html", message="Väärä käyttäjätunnus tai salasana")
+        error = "Väärä käyttäjätunnus tai salasana"        
+    return render_template("login.html", error=error)
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "GET":
-        return render_template("register.html")
+    if "username" in session.keys():
+        return redirect("/")
+    error = None
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
         if users.register(username, password):
             return redirect("/")
         else:
-            return render_template("error.html", message="Rekisteröinti ei onnistunut")
+            error = "Rekisteröinti ei onnistunut, koska käyttäjätunnus (min. 5 merkkiä) tai salasana (min. 8 merkkiä) on liian lyhyt tai käyttäjätunnus on jo olemassa."
+    return render_template("register.html", error = error)
+
 
 
 @app.route("/logout")

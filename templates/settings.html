@@ -4,3 +4,10 @@
 
 
 {% include "menu.html" %}
+
+<form action="/targetbudget" method="POST">
+    <p>Budjettitavoite:</p>
+    <input type="text" name="source">
+    <p></p>
+    <input type="submit" value="Aseta tavoite">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">

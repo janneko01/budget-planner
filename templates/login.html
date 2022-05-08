@@ -16,8 +16,8 @@
         <title>Budget Planner</title>
         <h1>Budget Planner</h1>
         <h3>Kirjaudu sisään</h3>
-        {% if loginError %}
-        <p>Väärä käyttäjätunnus tai salasana</p>
+        {% if error %}
+          {{ error }}
         {% endif %}
         <hr />
         <form action="/login" method="POST">
