@@ -17,15 +17,24 @@ def get_costs_by_month(userid):
     targetday = datetime.today().date().replace(day = 1)
     nextmonth = (targetday + timedelta(days = 32)).replace(day = 1)
 
+    sql = "SELECT targetbudget FROM usersettings WHERE userid=:userid"
+    budget = db.session.execute(sql, {"userid":userid}).fetchone()
+    budget = budget[0] / 30 if budget else None
+
     i = 0
     sum = 0
     result = []
+    budgetSum = budget
 
     while targetday < nextmonth:
         if i < len(costs) and costs[i][0] == targetday:
             sum += costs[i][1]
             i += 1
-        result.append([targetday.strftime('%d.%m.'), sum])
+        if budget:
+            result.append([targetday.strftime('%d.%m.'), sum, budgetSum])
+            budgetSum += budget
+        else:
+            result.append([targetday.strftime('%d.%m.'), sum])
         targetday += timedelta(days = 1)
     return result
 

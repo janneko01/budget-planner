@@ -56,10 +56,11 @@ var chart = new google.visualization.PieChart(document.getElementById('myChart')
       var data = new google.visualization.DataTable();
       data.addColumn('string', 'Päivä');
       data.addColumn('number', 'Summa');
+      data.addColumn('number', 'Budjetti');
 
       data.addRows([
         {% for costByDay in costsByMonth %}
-        ['{{ costByDay[0] }}', {{ costByDay[1]}}],
+        ['{{ costByDay[0] }}', {{ costByDay[1]}}, {{ costByDay[2]}}],
         {% endfor %}
       ]);
 

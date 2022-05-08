@@ -1,5 +1,6 @@
 from os import abort
 from app import app
+from datetime import datetime
 from flask import flash, render_template
 from crypt import methods
 from itertools import product
@@ -74,9 +75,10 @@ def new():
     if "username" not in session.keys():
         return redirect("/login")
     if request.method == "GET":
+        currentDate = datetime.now().date().strftime('%Y-%m-%d')
         monthlyCosts = costs.get_this_month_costs(session["userid"])
         print(monthlyCosts)
-        return render_template("costs.html", session=session, monthlyCosts=monthlyCosts)
+        return render_template("costs.html", session=session, monthlyCosts=monthlyCosts, currentDate=currentDate)
     users.check_csrf()
     category = request.form["category"]
     product = request.form["product"]
@@ -98,8 +100,9 @@ def income():
     if "username" not in session.keys():
         return redirect("/login")
     if request.method == "GET":
+        currentDate = datetime.now().date().strftime('%Y-%m-%d')
         monthlyIncome = incomes.get_incomes(session["userid"])
-        return render_template("income.html", session=session, monthlyIncome=monthlyIncome)
+        return render_template("income.html", session=session, monthlyIncome=monthlyIncome, currentDate=currentDate)
     users.check_csrf()
     source = request.form["source"]
     amount = request.form["income"]

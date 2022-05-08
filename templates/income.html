@@ -60,7 +60,7 @@
         <p>Tulon määrä:</p>
         <input type="text" name="income">
         <p>Tulon päivä:</p>
-        <input type="date" id="date" name="date">
+        <input type="date" id="date" name="date" value="{{ currentDate }}">
         <p></p>
         <input type="submit" value="Lisää tulo">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">

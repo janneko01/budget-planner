@@ -82,10 +82,10 @@
         
             <p>Ostettu tuote:</p>
             <input type="text" name="product">
-            <p>Ostoksen summa:</p>
+            <p>Ostoksen summa (€):</p>
             <input type="text" name="price">
             <p>Ostoksen päivä:</p>
-            <input type="date" id="date" name="date">
+            <input type="date" id="date" name="date" value="{{ currentDate }}">
             <p></p>
             <input type="submit" value="Lisää meno">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
