@@ -77,8 +77,14 @@ def new():
     users.check_csrf()
     category = request.form["category"]
     product = request.form["product"]
-    price = int(request.form["price"])
+    price = request.form["price"]
     eventDate = request.form["date"]
+    if len(product) > 20 or len(product) < 3:
+        flash("Tuotetta ei voitu lisätä. Tuotteen nimi on liian pitkä tai liian lyhyt.")
+        return render_template("new.html")
+    if not price.isnumeric() or len(price) > 7:
+        flash("Tuotetta ei voitu lisätä. Tarkista hinta.")
+        return render_template("new.html")
     sql = "INSERT INTO costs (category, product, price, eventDate, userid) VALUES (:category, :product, :price, :eventDate, :userid)"
     db.session.execute(sql, {"category":category, "product":product, "price":price, "eventDate":eventDate, "userid":session["userid"]})
     db.session.commit()
@@ -94,10 +100,16 @@ def income():
     source = request.form["source"]
     income = request.form["income"]
     eventDate = request.form["date"]
+    if len(source) > 20 or len(source) < 3:
+        flash("Tuloa ei voitu lisätä. Tulon lähde liian pitkä tai liian lyhyt.")
+        return render_template("income.html")
+    if not income.isnumeric() or len(income) > 7:
+        flash("Tuloa ei voitu lisätä. Tarkista tulon määrä.")
+        return render_template("income.html")
     sql = "INSERT INTO income (source, income, eventDate, userid) VALUES (:source, :income, :eventDate, :userid)"
     db.session.execute(sql, {"source":source, "income":income, "eventDate":eventDate, "userid":session["userid"]})
     db.session.commit()
-    return redirect("/")
+    return redirect("/income")
 
 @app.route("/settings", methods=["GET", "POST"])
 def settings():

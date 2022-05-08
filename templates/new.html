@@ -42,7 +42,13 @@
   </body>
 
 
-
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      {{ message }}
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#add">
     + Lisää meno
   </button>
@@ -58,7 +64,7 @@
 
             <p>Ostoksen kategoria:</p>
         
-        
+            
             <select class="form-select" aria-label="Default select example" name="category">
                 <option selected>Valitse ostoksen kategoria</option>
                 <option value="Alkoholi">Alkoholi</option>
