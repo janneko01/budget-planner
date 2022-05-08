@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 import users
 import costs
+import incomes
 
 from db import db
 
@@ -68,14 +69,14 @@ def logout():
     users.logout()
     return redirect("/")
 
-@app.route("/new", methods=["GET", "POST"])
+@app.route("/costs", methods=["GET", "POST"])
 def new():
     if "username" not in session.keys():
         return redirect("/login")
     if request.method == "GET":
         monthlyCosts = costs.get_this_month_costs(session["userid"])
         print(monthlyCosts)
-        return render_template("new.html", session=session, monthlyCosts=monthlyCosts)
+        return render_template("costs.html", session=session, monthlyCosts=monthlyCosts)
     users.check_csrf()
     category = request.form["category"]
     product = request.form["product"]
@@ -83,33 +84,34 @@ def new():
     eventDate = request.form["date"]
     if len(product) > 20 or len(product) < 3:
         flash("Tuotetta ei voitu lisätä. Tuotteen nimi on liian pitkä tai liian lyhyt.")
-        return render_template("new.html")
+        return render_template("costs.html")
     if not price.isnumeric() or len(price) > 7:
         flash("Tuotetta ei voitu lisätä. Tarkista hinta.")
-        return render_template("new.html")
+        return render_template("costs.html")
     sql = "INSERT INTO costs (category, product, price, eventDate, userid) VALUES (:category, :product, :price, :eventDate, :userid)"
     db.session.execute(sql, {"category":category, "product":product, "price":price, "eventDate":eventDate, "userid":session["userid"]})
     db.session.commit()
-    return redirect("/new")
+    return redirect("/costs")
 
 @app.route("/income", methods=["GET", "POST"])
 def income():
     if "username" not in session.keys():
         return redirect("/login")
     if request.method == "GET":
-        return render_template("income.html", session=session)
+        monthlyIncome = incomes.get_incomes(session["userid"])
+        return render_template("income.html", session=session, monthlyIncome=monthlyIncome)
     users.check_csrf()
     source = request.form["source"]
-    income = request.form["income"]
+    amount = request.form["income"]
     eventDate = request.form["date"]
     if len(source) > 20 or len(source) < 3:
         flash("Tuloa ei voitu lisätä. Tulon lähde liian pitkä tai liian lyhyt.")
         return render_template("income.html")
-    if not income.isnumeric() or len(income) > 7:
+    if not amount.isnumeric() or len(amount) > 7:
         flash("Tuloa ei voitu lisätä. Tarkista tulon määrä.")
         return render_template("income.html")
     sql = "INSERT INTO income (source, income, eventDate, userid) VALUES (:source, :income, :eventDate, :userid)"
-    db.session.execute(sql, {"source":source, "income":income, "eventDate":eventDate, "userid":session["userid"]})
+    db.session.execute(sql, {"source":source, "income":amount, "eventDate":eventDate, "userid":session["userid"]})
     db.session.commit()
     return redirect("/income")
 

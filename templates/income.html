@@ -19,9 +19,33 @@
     {% endfor %}
   {% endif %}
   {% endwith %}
+  <p></p>
   <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#add">
     + Lisää tulo
   </button>
+
+
+  <p></p>
+  <h2>Tämän kuun tulosi:</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tulon lähde</th>
+        <th>Määrä (€)</th>
+        <th>Päivä</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in monthlyIncome %}
+      <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
 
   <div class="offcanvas offcanvas-end" id="add">
@@ -31,7 +55,7 @@
     </div>
     <div class="offcanvas-body">
         <form action="/income" method="POST">
-        <p>Tulon lähde</p>
+        <p>Tulon lähde:</p>
         <input type="text" name="source">
         <p>Tulon määrä:</p>
         <input type="text" name="income">

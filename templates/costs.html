@@ -18,6 +18,7 @@
       {% endfor %}
     {% endif %}
   {% endwith %}
+  <p></p>
   <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#add">
       + Lisää meno
     </button>
@@ -30,7 +31,7 @@
         <tr>
           <th>Kategoria</th>
           <th>Tuote</th>
-          <th>Hinta</th>
+          <th>Hinta (€)</th>
           <th>Päivä</th>
         </tr>
       </thead>
@@ -58,7 +59,7 @@
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
-        <form action="/new" method="POST">
+        <form action="/costs" method="POST">
 
             <p>Ostoksen kategoria:</p>
         
@@ -71,7 +72,7 @@
                 <option value="Liikenne">Liikenne</option>
             </select>
         
-            <p>Ostettu tuote</p>
+            <p>Ostettu tuote:</p>
             <input type="text" name="product">
             <p>Ostoksen summa:</p>
             <input type="text" name="price">
