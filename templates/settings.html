@@ -5,9 +5,18 @@
 
 {% include "menu.html" %}
 
-<form action="/targetbudget" method="POST">
-    <p>Budjettitavoite:</p>
-    <input type="text" name="source">
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+<form action="/settings" method="POST">
+    <p>Budjettitavoite (€):</p>
+    <input type="text" name="targetbudget" value="{{ budget }}">
     <p></p>
     <input type="submit" value="Aseta tavoite">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>

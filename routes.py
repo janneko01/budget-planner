@@ -119,6 +119,26 @@ def income():
 def settings():
     if "username" not in session.keys():
         return redirect("/login")
+    sql = "SELECT targetbudget FROM usersettings WHERE userid=:userid"
+    budget = db.session.execute(sql, {"userid":session["userid"]}).fetchone()
+    if budget:
+        budget = budget[0]
+    else:
+        budget = ""
+
     if request.method == "GET":
-        return render_template("settings.html", session=session)
-    return redirect("/")
+        return render_template("settings.html", session=session, budget=budget)
+    users.check_csrf()
+    targetBudget = request.form["targetbudget"]
+    if not targetBudget.isnumeric() or len(targetBudget) > 7:
+        flash("Budjetin tulee olla kokonaisluku")
+        return render_template("settings.html")
+    targetBudget = int(targetBudget)    
+    if budget:
+        sql = "UPDATE usersettings SET targetbudget=:targetbudget WHERE userid=:userid"
+    else:
+        sql = "INSERT INTO usersettings (targetbudget, userid) VALUES (:targetbudget, :userid)"
+    db.session.execute(sql, {"targetbudget":targetBudget, "userid":session["userid"]})
+    db.session.commit()
+    flash("Budjettitavoite päivitetty")
+    return redirect("/settings")
